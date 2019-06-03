@@ -1,0 +1,10 @@
+Before I landed on Phaser I had wanted to work with React. After following the beginnings of a couple tutorials I decided I will incorporate React into one of my later projects instead (there seems to be a lot to learn there and I'll go into that when I have more time on my hands). 
+
+I toyed around with three JS a bit and decided I did not want to do that either.
+
+I found a couple of video tutorials (https://www.youtube.com/watch?v=T8a8-SO6vP0) that walk you through creating a game with phaser js but decided to mainly work directly with Phasers documentation and Richard Davey's (of photonstorm) written tutorial. (https://phaser.io/tutorials/making-your-first-phaser-3-game/part1).
+
+
+---------------------------PERSONAL NOTES----------------------------
+
+- A renderer is a carefully engineered program, based on a selective mixture of disciplines related to: light physics, visual perception and mathematics.

@@ -1,6 +1,6 @@
 {
     "files": [
-        "app.ts"
+        "typescript/app.ts"
     ],
     "compilerOptions": {
         "removeComments": true,
