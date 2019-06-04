@@ -1,10 +1,23 @@
-Before I landed on Phaser I had wanted to work with React. After following the beginnings of a couple tutorials I decided I will incorporate React into one of my later projects instead (there seems to be a lot to learn there and I'll go into that when I have more time on my hands). 
+Before I landed on Phaser I had wanted to work with React. After following 
+the beginnings of a couple tutorials I decided I will incorporate React 
+into one of my later projects instead (there seems to be a lot to learn 
+there and I'll go into that when I have more time on my hands). 
 
-I toyed around with three JS a bit and decided I did not want to do that either.
+I toyed around with three JS a bit and decided I did not want to do that
+either.
 
-I found a couple of video tutorials (https://www.youtube.com/watch?v=T8a8-SO6vP0) that walk you through creating a game with phaser js but decided to mainly work directly with Phasers documentation and Richard Davey's (of photonstorm) written tutorial. (https://phaser.io/tutorials/making-your-first-phaser-3-game/part1).
+I found a couple of video tutorials (https://www.youtube.com/watch?v=T8a8-SO6vP0) 
+that walk you through creating a game with phaser js but decided to mainly
+work directly with Phasers documentation and Richard Davey's (of photonstorm) 
+written tutorial. (https://phaser.io/tutorials/making-your-first-phaser-3-game/part1). 
+He offers a finished product of this tutorial but I decided to type by hand and 
+take notes to get a firmer grasp on Phaser's functionality.
 
 
+-Green egg man sprite: https://opengameart.org/content/2d-adventure-sprite
+- Platforms https://opengameart.org/content/tiny-platform-quest-sprites
 ---------------------------PERSONAL NOTES----------------------------
 
-- A renderer is a carefully engineered program, based on a selective mixture of disciplines related to: light physics, visual perception and mathematics.
+- A renderer is a carefully engineered program, based on a selective 
+mixture of disciplines related to: light physics, visual perception and
+mathematics.

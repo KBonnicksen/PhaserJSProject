@@ -6,6 +6,6 @@
         "removeComments": true,
         "outDir": "scripts",
         "target": "es5",
-        "watch": true
+        "watch": true,
     }
 }
