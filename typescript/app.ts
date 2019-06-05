@@ -1,7 +1,7 @@
 ﻿/// <reference path="phaser.d.ts"/>
 
 //how you configure your game
-var config = {
+let confi:Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO, //renderer
     width: window.innerWidth,
     height: window.innerHeight,
@@ -17,7 +17,7 @@ var config = {
         }
     },
     scene: { 
-        preload: preload, //load the assets
+        preload: preload, 
         create: create,
         update: update
     }
@@ -35,7 +35,8 @@ function preload() {
                           {frameWidth: 160, frameHeight: 360, 
                            startFrame: 0, endFrame: 47});
 
-    this.load.image('tile', 'objects/stone-tiles.jpg')
+    this.load.image('tile', 'objects/stone-tiles.jpg');
+    this.load.audio('hit', 'sounds/thud.mp3')
 }
 
 function create() {
@@ -60,10 +61,12 @@ function create() {
 
     /*----------------player----------------------------*/
     player = this.physics.add.sprite(200, 20, 'greenGuy').setScale(.4);
-
+    this.physics.add.collider(player, platforms);
     player.setBounce(.3); 
     player.setCollideWorldBounds(true);
     player.body.setGravityY(500);
+    player.sfx = {};
+    //player.sfx.collide = this.add.audio('hit');
 
     cursors = this.input.keyboard.createCursorKeys();
 
@@ -89,10 +92,11 @@ function create() {
         repeat: -1
     });
 
-    this.physics.add.collider(player, platforms);
+    
 }
 
 function update() {
+   
     if (cursors.left.isDown) {
         player.setVelocityX(-200);
 

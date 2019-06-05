@@ -1,4 +1,4 @@
-var config = {
+var confi = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
@@ -27,6 +27,7 @@ function preload() {
     this.load.spritesheet('greenGuy', 'objects/green-sprite.png', { frameWidth: 160, frameHeight: 360,
         startFrame: 0, endFrame: 47 });
     this.load.image('tile', 'objects/stone-tiles.jpg');
+    this.load.audio('hit', 'sounds/thud.mp3');
 }
 function create() {
     this.add.image(window.innerWidth / 2, window.innerHeight / 5.5, 'background').setScale(1.8);
@@ -44,9 +45,11 @@ function create() {
         platforms.create(1300 + i * 24, 200, 'tile');
     }
     player = this.physics.add.sprite(200, 20, 'greenGuy').setScale(.4);
+    this.physics.add.collider(player, platforms);
     player.setBounce(.3);
     player.setCollideWorldBounds(true);
     player.body.setGravityY(500);
+    player.sfx = {};
     cursors = this.input.keyboard.createCursorKeys();
     this.anims.create({
         key: 'left',
@@ -66,7 +69,6 @@ function create() {
         frameRate: 12,
         repeat: -1
     });
-    this.physics.add.collider(player, platforms);
 }
 function update() {
     if (cursors.left.isDown) {

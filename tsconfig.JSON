@@ -1,11 +1,17 @@
 {
     "files": [
-        "typescript/app.ts"
+        "typescript/app.ts", 
+        "typescript/gameScene.ts",
+        "typescript/playGame.ts"
     ],
     "compilerOptions": {
         "removeComments": true,
         "outDir": "scripts",
         "target": "es5",
         "watch": true,
-    }
+    },
+    "exclude": [
+        "node_modules",
+        "typescript/phaser.d.ts"
+    ]
 }
