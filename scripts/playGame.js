@@ -11,7 +11,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-window.addEventListener('resize', resizeApp);
 var GameScene = (function (_super) {
     __extends(GameScene, _super);
     function GameScene() {
@@ -98,8 +97,8 @@ var GameScene = (function (_super) {
 }(Phaser.Scene));
 var config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
     parent: 'content',
     audio: {
         disableWebAudio: true
@@ -124,11 +123,4 @@ var GreenManGame = (function (_super) {
 ;
 window.onload = function () {
     var game = new GreenManGame(config);
-    resizeApp();
 };
-function resizeApp() {
-    var game_ratio = 800 / 600;
-    var div = document.getElementById('content');
-    div.style.width = (window.innerHeight * game_ratio) + 'px';
-    div.style.height = window.innerHeight + 'px';
-}

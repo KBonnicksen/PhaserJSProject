@@ -1,6 +1,5 @@
 /// <reference path="phaser.d.ts"/>
 
-window.addEventListener('resize', resizeApp);
 class GameScene extends Phaser.Scene {
     platforms: Phaser.Physics.Arcade.StaticGroup;
     player: Phaser.Physics.Arcade.Sprite;
@@ -68,17 +67,19 @@ class GameScene extends Phaser.Scene {
 
     private createPlatforms() {
         this.platforms = this.physics.add.staticGroup();
+
+        //floor
         for (let i = 0; i < window.innerWidth / 24; i++) {
             this.platforms.create(24 * i + 12, window.innerHeight - 12, 'tile');
         }
         for (let i = 0; i <= 25; i++) {
             if (i < 12) {
-                this.platforms.create(800 + i * 24, 380, 'tile');
+                this.platforms.create(800 + i * 24, 380, 'tile');//small middle
             }
-            this.platforms.create(i * 24, 200, 'tile');
-            this.platforms.create(200 + i * 24, 550, 'tile');
-            this.platforms.create(1100 + i * 24, 600, 'tile');
-            this.platforms.create(1300 + i * 24, 200, 'tile');
+            this.platforms.create(i * 24, 200, 'tile'); //top left
+            this.platforms.create(200 + i * 24, 550, 'tile'); //bottom left
+            this.platforms.create(1100 + i * 24, 600, 'tile'); //bottom right
+            this.platforms.create(1300 + i * 24, 200, 'tile'); //top right
         }
     }
 
@@ -107,15 +108,9 @@ class GameScene extends Phaser.Scene {
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO, 
-    width: 800,
-    height: 600,
-    parent: 'content',
-    /*width: window.innerWidth,
+    width: window.innerWidth,
     height: window.innerHeight,
-     scale: {
-        parent: "content",
-        mode: Phaser.Scale.
-    }, */
+    parent: 'content',
 
     audio: {
         disableWebAudio: true
@@ -138,52 +133,7 @@ class GreenManGame extends Phaser.Game{
 
 window.onload = function(){
     let game = new GreenManGame(config);
-    resizeApp();
 }
 
-
-/*const config = {
-    type: Phaser.AUTO,
-    width: 9 * 32, // 288
-    height: 15 * 32, // 480
-    parent: 'phaser-app',
-    scene: scenes
-};
-
-let game = new Phaser.Game(config);
-Besides that, you can just copy - paste the code below and it should work.
-
-    Anyways, here is the resizeApp() function:
-
-    <script>*/
-function resizeApp()
-{
-    // Width-height-ratio of game resolution
-    let game_ratio = 800 / 600;
-
-    // Make div full height of browser and keep the ratio of game resolution
-    let div = document.getElementById('content');
-    div.style.width = (window.innerHeight * game_ratio) + 'px';
-    div.style.height = window.innerHeight + 'px';
-
-    /* Check if device DPI messes up the width-height-ratio
-    let canvas = document.getElementsByTagName('canvas')[0];
-
-    let dpi_w = (parseInt(div.style.width) / canvas.width);
-    let dpi_h = (parseInt(div.style.height) / canvas.height);
-
-    let height = window.innerHeight * (dpi_w / dpi_h);
-    let width = height * 0.6;
-
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';*/
-}
-
-/*Add to resize event
-window.addEventListener('resize', resizeApp);
-
-// Set correct size when page loads the first time
-resizeApp();
-</script>﻿*/
 
 
