@@ -11,6 +11,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var width = window.innerWidth;
+var height = window.innerHeight;
 var GameScene = (function (_super) {
     __extends(GameScene, _super);
     function GameScene() {
@@ -22,26 +24,51 @@ var GameScene = (function (_super) {
         this.load.image('background', 'objects/Background.png');
         this.load.spritesheet('greenGuy', 'objects/green-sprite.png', {
             frameWidth: 160, frameHeight: 360,
-            startFrame: 0, endFrame: 47
         });
         this.load.image('tile', 'objects/stone-tiles.jpg');
-        this.load.audio('hit', 'sounds/thud.mp3');
+        this.load.image('ruby', 'objects/ruby.png');
+        this.load.spritesheet('yellowJewel', 'objects/yellow-jewel.png', {
+            frameWidth: 32, frameHeight: 32,
+            startFrame: 0, endFrame: 7,
+        });
     };
     GameScene.prototype.create = function () {
         this.add.image(window.innerWidth / 2, window.innerHeight / 5.5, 'background').setScale(1.8);
+        this.createJewels();
         this.createPlatforms();
         this.createPlayer();
         this.createAnimation();
+        this.physics.add.collider(this.jewels, this.platforms);
+        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.overlap(this.player, this.jewels, this.collectJewel, null, this);
+    };
+    GameScene.prototype.collectJewel = function (player, jewel) {
+        jewel.disableBody(true, true);
+    };
+    GameScene.prototype.createJewels = function () {
+        this.jewels = this.physics.add.group({
+            key: 'jewel',
+            repeat: 9,
+            setXY: { x: 12, y: 300, stepX: (width / 9), stepY: -50 },
+        });
+        this.jewels.children.iterate(function (child) {
+            child.setBounceY(Phaser.Math.FloatBetween(0.2, 0.6));
+        });
     };
     GameScene.prototype.createPlayer = function () {
         this.player = this.physics.add.sprite(200, 20, 'greenGuy').setScale(.4);
-        this.physics.add.collider(this.player, this.platforms);
         this.player.setBounce(.3);
         this.player.setCollideWorldBounds(true);
         this.player.setGravityY(500);
     };
     GameScene.prototype.createAnimation = function () {
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.anims.create({
+            key: 'yellowJewel',
+            frames: this.anims.generateFrameNumbers('yellowJewel', { start: 0, end: 7 }),
+            frameRate: 7,
+            repeat: -1
+        });
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('greenGuy', { start: 15, end: 23 }),
@@ -60,6 +87,13 @@ var GameScene = (function (_super) {
             frameRate: 12,
             repeat: -1
         });
+        this.anims.create({
+            key: 'spin',
+            frames: this.anims.generateFrameNumbers('yellowJewel', { start: 0, end: 7 }),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.jewels.playAnimation('yellowJewel', '0');
     };
     GameScene.prototype.createPlatforms = function () {
         this.platforms = this.physics.add.staticGroup();

@@ -1,7 +1,5 @@
 {
     "files": [
-        "typescript/app.ts", 
-        "typescript/gameScene.ts",
         "typescript/playGame.ts"
     ],
     "compilerOptions": {
