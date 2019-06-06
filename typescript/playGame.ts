@@ -52,24 +52,27 @@ class GameScene extends Phaser.Scene {
 
         this.createPlayer();
 
-        this.spiders = this.physics.add.group(
-            /* {
-                key: 'top-left',        TODO: ADD ALL SPIDERS
-                repeat: 8,
-                setXY: { x: 12, y: 300, stepX: (width / 9), stepY: -50 },
-            }, */
-            {
-                key: 'ground',
-                setXY: { x: 0, y: height - 24},
-            }
-
-        );
+        this.createSpiders();
 
         this.scoreText = this.add.text(16, 16, 'score: 0', {fontSize: '32px'});
         this.createAnimation();
         this.physics.add.collider(this.jewels, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.spiders, this.platforms);
+        this.physics.add.collider(this.player, this.spiders);
         this.physics.add.overlap(this.player, this.jewels, this.collectJewel, null, this);
+    }
+
+    private createSpiders() {
+        this.spiders = this.physics.add.group({
+            key: 'ground',
+           // repeat: 8,
+            setXY: { x: 900, y: 100},
+        });
+        this.spiders.children.iterate(function(child){
+            (<Phaser.Physics.Arcade.Sprite>child).anims.forward = true;
+            (<Phaser.Physics.Arcade.Sprite>child).setVelocityX(-50);
+        })
     }
 
     private collectJewel(player, jewel){
@@ -140,12 +143,20 @@ class GameScene extends Phaser.Scene {
             repeat: -1
         });
         this.anims.create({
-            key: 'spider-walk-right',
-            frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 8}),
+            key: 'spider-left',
+            frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 9}),
             frameRate: 7,
-            repeat: -1
+            repeat: -1, 
+            showOnStart: true
         });
-        this.spiders.playAnimation('spider-walk-right', '0');
+        this.anims.create({
+            key: 'spider-right',
+            frames: this.anims.generateFrameNumbers('spider', { start: 20, end: 29}),
+            frameRate: 7,
+            repeat: -1, 
+            showOnStart: true
+        });
+        this.spiders.playAnimation('spider-left', '0');
         this.jewels.playAnimation('yellowJewel', '0');
     }
 
@@ -168,6 +179,13 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
+        /*******************update spiders *****************************/
+        this.spiders.children.iterate(function(child){
+            if((<Phaser.Physics.Arcade.Sprite>child).x <= 0 ||
+                (<Phaser.Physics.Arcade.Sprite>child).x >= width){
+                    //this.toggleSpiderDirection(this);
+            }
+        })
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-200);
 
@@ -188,6 +206,12 @@ class GameScene extends Phaser.Scene {
             this.player.setVelocityY(-570);
         }
     }
+
+    /* toggleSpiderDirection(spider:Phaser.Physics.Arcade.Sprite){
+        (spider.frame ){
+
+        }
+    } */
 }
 
 const config: Phaser.Types.Core.GameConfig = {

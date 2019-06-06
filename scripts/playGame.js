@@ -40,15 +40,24 @@ var GameScene = (function (_super) {
         this.createJewels();
         this.createPlatforms();
         this.createPlayer();
-        this.spiders = this.physics.add.group({
-            key: 'ground',
-            setXY: { x: 0, y: height - 24 },
-        });
+        this.createSpiders();
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px' });
         this.createAnimation();
         this.physics.add.collider(this.jewels, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.spiders, this.platforms);
+        this.physics.add.collider(this.player, this.spiders);
         this.physics.add.overlap(this.player, this.jewels, this.collectJewel, null, this);
+    };
+    GameScene.prototype.createSpiders = function () {
+        this.spiders = this.physics.add.group({
+            key: 'ground',
+            setXY: { x: 900, y: 100 },
+        });
+        this.spiders.children.iterate(function (child) {
+            child.anims.forward = true;
+            child.setVelocityX(-50);
+        });
     };
     GameScene.prototype.collectJewel = function (player, jewel) {
         jewel.disableBody(true, true);
@@ -109,12 +118,20 @@ var GameScene = (function (_super) {
             repeat: -1
         });
         this.anims.create({
-            key: 'spider-walk-right',
-            frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 8 }),
+            key: 'spider-left',
+            frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 9 }),
             frameRate: 7,
-            repeat: -1
+            repeat: -1,
+            showOnStart: true
         });
-        this.spiders.playAnimation('spider-walk-right', '0');
+        this.anims.create({
+            key: 'spider-right',
+            frames: this.anims.generateFrameNumbers('spider', { start: 20, end: 29 }),
+            frameRate: 7,
+            repeat: -1,
+            showOnStart: true
+        });
+        this.spiders.playAnimation('spider-left', '0');
         this.jewels.playAnimation('yellowJewel', '0');
     };
     GameScene.prototype.createPlatforms = function () {
@@ -133,6 +150,11 @@ var GameScene = (function (_super) {
         }
     };
     GameScene.prototype.update = function () {
+        this.spiders.children.iterate(function (child) {
+            if (child.x <= 0 ||
+                child.x >= width) {
+            }
+        });
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-200);
             this.player.anims.play('left', true);
