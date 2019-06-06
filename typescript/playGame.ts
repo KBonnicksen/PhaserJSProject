@@ -1,8 +1,8 @@
 /// <reference path="phaser.d.ts"/>
 //TODO: add baddies
 //TODO: scale for screens
-//TODO: add gems
-//TODO: Keep score
+//DONE: add gems
+//DONE: Keep score
 //DONE: animate jewels
 
 var width = window.innerWidth;
@@ -12,7 +12,9 @@ class GameScene extends Phaser.Scene {
     player: Phaser.Physics.Arcade.Sprite;
     cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     jewels: Phaser.Physics.Arcade.Group
-    //score: 
+    score:number;
+    scoreText:Phaser.GameObjects.Text; 
+    spiders: Phaser.Physics.Arcade.Group;
 
     constructor() {
         super({
@@ -22,32 +24,48 @@ class GameScene extends Phaser.Scene {
 
     preload() {
         this.load.image('background', 'objects/Background.png');
+        this.load.image('tile', 'objects/stone-tiles.jpg');
+        this.load.image('ruby', 'objects/ruby.png');
         this.load.spritesheet('greenGuy', 'objects/green-sprite.png',
             {
                 frameWidth: 160, frameHeight: 360,
             });
-
-        this.load.image('tile', 'objects/stone-tiles.jpg');
-        this.load.image('ruby', 'objects/ruby.png');
+        
         //this.load.audio('hit', 'sounds/thud.mp3')
         this.load.spritesheet('yellowJewel', 'objects/yellow-jewel.png', 
             {
                 frameWidth: 32, frameHeight: 32,
-                startFrame: 0, endFrame: 7, 
-            
             });
+        
+        this.load.spritesheet('spider', 'objects/spider.png',
+        {
+            frameWidth: 64, frameHeight: 64
+        });
     }
 
     create() {
         this.add.image(window.innerWidth / 2, window.innerHeight / 5.5, 'background').setScale(1.8);
-
+        this.score = 0;
         this.createJewels();
         
         this.createPlatforms();
 
         this.createPlayer();
 
+        this.spiders = this.physics.add.group(
+            /* {
+                key: 'top-left',        TODO: ADD ALL SPIDERS
+                repeat: 8,
+                setXY: { x: 12, y: 300, stepX: (width / 9), stepY: -50 },
+            }, */
+            {
+                key: 'ground',
+                setXY: { x: 0, y: height - 24},
+            }
 
+        );
+
+        this.scoreText = this.add.text(16, 16, 'score: 0', {fontSize: '32px'});
         this.createAnimation();
         this.physics.add.collider(this.jewels, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
@@ -56,13 +74,21 @@ class GameScene extends Phaser.Scene {
 
     private collectJewel(player, jewel){
         (<Phaser.Physics.Arcade.Sprite>jewel).disableBody(true, true);
+        this.score += 10;
+        this.scoreText.text = 'score: ' + this.score.toString();
 
+        if(this.jewels.countActive(true) === 0){
+            this.jewels.children.iterate(function(child){ //reset jewels
+                (<Phaser.Physics.Arcade.Sprite>child).enableBody(true, 
+                    (<Phaser.Physics.Arcade.Sprite>child).x, 0, true, true);
+            })
+        }
     }
 
     private createJewels() {
         this.jewels = this.physics.add.group({
             key: 'jewel',
-            repeat: 9,
+            repeat: 8,
             setXY: { x: 12, y: 300, stepX: (width / 9), stepY: -50},
         });
 
@@ -113,7 +139,13 @@ class GameScene extends Phaser.Scene {
             frameRate: 7,
             repeat: -1
         });
-
+        this.anims.create({
+            key: 'spider-walk-right',
+            frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 8}),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.spiders.playAnimation('spider-walk-right', '0');
         this.jewels.playAnimation('yellowJewel', '0');
     }
 

@@ -22,21 +22,29 @@ var GameScene = (function (_super) {
     }
     GameScene.prototype.preload = function () {
         this.load.image('background', 'objects/Background.png');
+        this.load.image('tile', 'objects/stone-tiles.jpg');
+        this.load.image('ruby', 'objects/ruby.png');
         this.load.spritesheet('greenGuy', 'objects/green-sprite.png', {
             frameWidth: 160, frameHeight: 360,
         });
-        this.load.image('tile', 'objects/stone-tiles.jpg');
-        this.load.image('ruby', 'objects/ruby.png');
         this.load.spritesheet('yellowJewel', 'objects/yellow-jewel.png', {
             frameWidth: 32, frameHeight: 32,
-            startFrame: 0, endFrame: 7,
+        });
+        this.load.spritesheet('spider', 'objects/spider.png', {
+            frameWidth: 64, frameHeight: 64
         });
     };
     GameScene.prototype.create = function () {
         this.add.image(window.innerWidth / 2, window.innerHeight / 5.5, 'background').setScale(1.8);
+        this.score = 0;
         this.createJewels();
         this.createPlatforms();
         this.createPlayer();
+        this.spiders = this.physics.add.group({
+            key: 'ground',
+            setXY: { x: 0, y: height - 24 },
+        });
+        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px' });
         this.createAnimation();
         this.physics.add.collider(this.jewels, this.platforms);
         this.physics.add.collider(this.player, this.platforms);
@@ -44,11 +52,18 @@ var GameScene = (function (_super) {
     };
     GameScene.prototype.collectJewel = function (player, jewel) {
         jewel.disableBody(true, true);
+        this.score += 10;
+        this.scoreText.text = 'score: ' + this.score.toString();
+        if (this.jewels.countActive(true) === 0) {
+            this.jewels.children.iterate(function (child) {
+                child.enableBody(true, child.x, 0, true, true);
+            });
+        }
     };
     GameScene.prototype.createJewels = function () {
         this.jewels = this.physics.add.group({
             key: 'jewel',
-            repeat: 9,
+            repeat: 8,
             setXY: { x: 12, y: 300, stepX: (width / 9), stepY: -50 },
         });
         this.jewels.children.iterate(function (child) {
@@ -93,6 +108,13 @@ var GameScene = (function (_super) {
             frameRate: 7,
             repeat: -1
         });
+        this.anims.create({
+            key: 'spider-walk-right',
+            frames: this.anims.generateFrameNumbers('spider', { start: 0, end: 8 }),
+            frameRate: 7,
+            repeat: -1
+        });
+        this.spiders.playAnimation('spider-walk-right', '0');
         this.jewels.playAnimation('yellowJewel', '0');
     };
     GameScene.prototype.createPlatforms = function () {
